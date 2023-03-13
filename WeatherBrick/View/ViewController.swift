@@ -27,6 +27,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         startLocationManager()
         setSearchButton()
+        setInfoButton()
 
         
     }
@@ -50,10 +51,19 @@ class ViewController: UIViewController {
         updateWeatherInfoLatitudeLongtitude(latitude: 0, longtitude: 0)
     }
     
+    func setInfoButton() {
+        infoButton.addTarget(self, action: #selector(setInfoView), for: .touchUpInside)
+    }
+    
+    @objc func setInfoView(){
+        let infoViwe = InfoView()
+        view.addSubview(infoViwe)
+    }
+    
     func updateWeatherInfoLatitudeLongtitude(latitude: Double, longtitude: Double) {
          let session = URLSession.shared
          guard let url = URL(string:
-             "https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=f2085fa546a323d778ef788c6b934414&lang=GB") else {return}
+             "https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=f2085fa546a323d778ef788c6b934414&lang=uk") else {return}
          let task = session.dataTask(with: url) { data, response, error in
              guard error == nil, let data = data else { print("Data task = \(String(describing: error?.localizedDescription))")
              return}
