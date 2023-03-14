@@ -9,7 +9,7 @@ import Foundation
 
 struct FetchWeatherManager {
     
-    func fetchWeather(latitude: Double, longitude: Double, completionhandler: @escaping (FinalWeather?)->()){
+    func fetchWeatherForCoordinates(latitude: Double, longitude: Double, completionhandler: @escaping (FinalWeather?)->()){
         let session = URLSession.shared
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=f2085fa546a323d778ef788c6b934414&units=metric&lang=uk") else {return}
         
@@ -26,6 +26,35 @@ struct FetchWeatherManager {
             if let response = response as? HTTPURLResponse,
                !(200...299).contains(response.statusCode) {
                 print("___Response error code = \(response.statusCode)")
+                completionhandler(nil)
+            }
+            if let weather = parseJSON(data: data) {
+                completionhandler(weather)
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchWeatherForCityName(cityName: String, completionhandler: @escaping (FinalWeather?)->()){
+        
+        let session = URLSession.shared
+        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=f2085fa546a323d778ef788c6b934414&units=metric&lang=uk") else {
+            completionhandler(nil)
+            return}
+        
+        let task = session.dataTask(with: url) { (data, response, error) in
+            
+            guard error == nil, let data = data else {
+                print("___Data Task = \(String(describing: error?.localizedDescription))")
+                DispatchQueue.global().asyncAfter(deadline: .now() + 3){
+                    completionhandler(nil)
+                }
+                return
+            }
+            if let response = response as? HTTPURLResponse,
+               !(200...299).contains(response.statusCode) {
+                print("___Response error code = \(response.statusCode)")
+                completionhandler(nil)
             }
             if let weather = parseJSON(data: data) {
                 completionhandler(weather)

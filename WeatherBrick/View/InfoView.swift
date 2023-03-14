@@ -15,7 +15,6 @@ class InfoView: UIView {
     
     let color = #colorLiteral(red: 0.5763047668, green: 0.2355876396, blue: 0.05401653666, alpha: 1)
     let imageView = UIImageView()
-    let firstView = UIView()
     let containerView = UIView()
     let closeButton = UIButton()
     

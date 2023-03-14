@@ -15,6 +15,7 @@ struct FinalWeather {
     var wind: Double
     var id: Int
     var temp: Double
+    var country : String
     
     var image: String {
         switch id {
@@ -31,5 +32,6 @@ struct FinalWeather {
         self.wind = weatherData.wind.speed
         self.id = weatherData.weather.first?.id ?? 0
         self.temp = weatherData.main.temp
+        self.country = weatherData.sys.country
     }
 }
