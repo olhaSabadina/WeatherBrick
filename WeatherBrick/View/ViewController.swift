@@ -77,7 +77,6 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.updateView(weather: weather)
                     self.activityIndicator.stopAnimating()
-                    self.activityIndicator.isHidden = true
                 }
             }
         }
@@ -112,7 +111,6 @@ class ViewController: UIViewController {
                     print("Stop location")
                     self.locationManager.stopUpdatingLocation()
                 }
-                self.activityIndicator.isHidden = true
             }
         }
     }
@@ -122,25 +120,38 @@ class ViewController: UIViewController {
             cityNameLabel.text = "\(weather.nameCity), \(weather.country)"
             weatherConditionsLabel.text = weather.description
             brickOnRopeImageView.image = UIImage(named: weather.image)
+            windOfBrick(windSpeed: weather.wind)
             
-        }
-    }
-    
-    func windOfBrick(windSpeed: Double){
-        print("windSpeed = \(windSpeed)")
-        if windSpeed > 4 {
-            UIView.animate(withDuration: 2, delay: 1) {
-                self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(30))
+            if (701...799).contains(weather.id){
+                brickOnRopeImageView.alpha = 0.15
+            } else {
+                brickOnRopeImageView.alpha = 1.0
             }
         } else {
+            tempValueLabel.text = ""
+            cityNameLabel.text = "Not found"
+            weatherConditionsLabel.text = ""
+            brickOnRopeImageView.image = UIImage(named: "image_without_stone_")
             UIView.animate(withDuration: 2, delay: 1) {
                 self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0))
             }
         }
+        
+        func windOfBrick(windSpeed: Double){
+            print("windSpeed = \(windSpeed)")
+            if windSpeed > 4 {
+                UIView.animate(withDuration: 2, delay: 1) {
+                    self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(30))
+                }
+            } else {
+                UIView.animate(withDuration: 2, delay: 1) {
+                    self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0))
+                }
+            }
+        }
+        
     }
-    
 }
-
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let lastLocation = locations.last {
