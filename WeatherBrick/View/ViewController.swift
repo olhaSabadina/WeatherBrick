@@ -10,7 +10,7 @@ import CoreLocation
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var imageStoneImageView: UIImageView!
+    @IBOutlet weak var brickOnRopeImageView: UIImageView!
     @IBOutlet weak var tempValueLabel: UILabel!
     @IBOutlet weak var indicationDegreeLabel: UILabel!
     @IBOutlet weak var weatherConditionsLabel: UILabel!
@@ -24,12 +24,12 @@ class ViewController: UIViewController {
     private var fetchManager = FetchWeatherManager()
     private var latitude: Double = 0 {
         didSet {
-            print(latitude)
+            print("широта \(latitude)")
         }
     }
     private var longitude: Double = 0 {
         didSet {
-            print(longitude)
+            print("долгота \(longitude)")
         }
     }
     
@@ -47,12 +47,13 @@ class ViewController: UIViewController {
     
     private func startLocationManager() {
         locationManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-            locationManager.pausesLocationUpdatesAutomatically = true
-            locationManager.startUpdatingHeading()
+        DispatchQueue.global().async {
+            if CLLocationManager.locationServicesEnabled() {
+                self.locationManager.delegate = self
+                self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+                self.locationManager.pausesLocationUpdatesAutomatically = true
+                self.locationManager.startUpdatingHeading()
+            }
         }
     }
     
@@ -61,9 +62,6 @@ class ViewController: UIViewController {
         view.addSubview(infoViwe)
     }
     
-    private func setSearchButton() {
-        searchButton.addTarget(self, action: #selector(setAlertControler), for: .touchUpInside)
-    }
     @objc func setAlertControler(){
         let alertControler = UIAlertController(title: "You can selected city", message: "Enter city name", preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "OK", style: .default){ action in
@@ -71,34 +69,37 @@ class ViewController: UIViewController {
                 print("please enter cityName")
                 return
             }
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
             print(alertText)
             self.fetchManager.fetchWeatherForCityName(cityName: alertText ) { weather in
                 DispatchQueue.main.async {
                     self.updateView(weather: weather)
-//                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.isHidden = true
                 }
             }
         }
+        let alertCancel = UIAlertAction(title: "Cancel", style: .destructive)
         
         alertControler.addTextField { textField in
             textField.placeholder = "Enter city name"
         }
         alertControler.addAction(alertAction)
+        alertControler.addAction(alertCancel)
         self.present(alertControler, animated: true)
-//
-//        fetchManager.fetchWeatherForCityName(cityName: alertControler.textFields?.first?.text ?? "") { FinalWeather? in
-//            DispatchQueue.main.async {
-//                self.tempValueLabel.text = "frfr"
-//            }
-//        }
-        
     }
     
     private func setInfoButton() {
         infoButton.addTarget(self, action: #selector(setInfoView), for: .touchUpInside)
     }
     
-    func refresh(){
+    private func setSearchButton() {
+        searchButton.addTarget(self, action: #selector(setAlertControler), for: .touchUpInside)
+    }
+    
+    private func refresh(){
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()
             self.locationManager.startUpdatingLocation()
@@ -109,16 +110,35 @@ class ViewController: UIViewController {
                 self.activityIndicator.stopAnimating()
                 DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 5){
                     print("Stop location")
-//                    self.locationManager.stopUpdatingLocation()
+                    self.locationManager.stopUpdatingLocation()
                 }
+                self.activityIndicator.isHidden = true
             }
         }
     }
-    func updateView(weather: FinalWeather?){
+    private func updateView(weather: FinalWeather?){
         if let weather = weather {
             tempValueLabel.text = weather.temperature
+            cityNameLabel.text = "\(weather.nameCity), \(weather.country)"
+            weatherConditionsLabel.text = weather.description
+            brickOnRopeImageView.image = UIImage(named: weather.image)
+            
         }
     }
+    
+    func windOfBrick(windSpeed: Double){
+        print("windSpeed = \(windSpeed)")
+        if windSpeed > 4 {
+            UIView.animate(withDuration: 2, delay: 1) {
+                self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(30))
+            }
+        } else {
+            UIView.animate(withDuration: 2, delay: 1) {
+                self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0))
+            }
+        }
+    }
+    
 }
 
 extension ViewController: CLLocationManagerDelegate {

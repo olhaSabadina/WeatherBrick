@@ -15,7 +15,7 @@ struct FinalWeather {
     var wind: Double
     var id: Int
     var temp: Double
-    var country : String
+    var country: String
     
     var image: String {
         switch id {
