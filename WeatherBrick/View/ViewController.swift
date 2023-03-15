@@ -22,17 +22,22 @@ class ViewController: UIViewController {
     
     private let locationManager = CLLocationManager()
     private var fetchManager = FetchWeatherManager()
-    private var latitude: Double = 0
-    private var longitude: Double = 0
-    
+    private var latitude: Double = 0 {
+        didSet {
+            print(latitude)
+        }
+    }
+    private var longitude: Double = 0 {
+        didSet {
+            print(longitude)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         startLocationManager()
         setSearchButton()
         setInfoButton()
-        refresh()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,25 +56,28 @@ class ViewController: UIViewController {
         }
     }
     
-    @objc func updateWeatherInfo(){
-        print("YUra")
-        updateWeatherInfoLatitudeLongtitude(latitude: latitude, longitude: longitude)
-    }
-    
     @objc func setInfoView(){
         let infoViwe = InfoView()
         view.addSubview(infoViwe)
     }
     
     private func setSearchButton() {
-        //            searchButton.addTarget(self, action: #selector(updateWeatherInfo), for: .touchUpInside)
         searchButton.addTarget(self, action: #selector(setAlertControler), for: .touchUpInside)
     }
     @objc func setAlertControler(){
         let alertControler = UIAlertController(title: "You can selected city", message: "Enter city name", preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "OK", style: .default){ action in
-            let alertText = alertControler.textFields?.first?.text
-            print(alertText ?? "nil")
+            guard let alertText = alertControler.textFields?.first?.text else {
+                print("please enter cityName")
+                return
+            }
+            print(alertText)
+            self.fetchManager.fetchWeatherForCityName(cityName: alertText ) { weather in
+                DispatchQueue.main.async {
+                    self.updateView(weather: weather)
+//                    self.activityIndicator.stopAnimating()
+                }
+            }
         }
         
         alertControler.addTextField { textField in
@@ -77,7 +85,7 @@ class ViewController: UIViewController {
         }
         alertControler.addAction(alertAction)
         self.present(alertControler, animated: true)
-//        
+//
 //        fetchManager.fetchWeatherForCityName(cityName: alertControler.textFields?.first?.text ?? "") { FinalWeather? in
 //            DispatchQueue.main.async {
 //                self.tempValueLabel.text = "frfr"
@@ -93,6 +101,7 @@ class ViewController: UIViewController {
     func refresh(){
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()
+            self.locationManager.startUpdatingLocation()
         }
         fetchManager.fetchWeatherForCoordinates(latitude: latitude, longitude: longitude) { weather in
             DispatchQueue.main.async {
@@ -100,7 +109,7 @@ class ViewController: UIViewController {
                 self.activityIndicator.stopAnimating()
                 DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 5){
                     print("Stop location")
-                    self.locationManager.stopUpdatingLocation()
+//                    self.locationManager.stopUpdatingLocation()
                 }
             }
         }
@@ -110,40 +119,14 @@ class ViewController: UIViewController {
             tempValueLabel.text = weather.temperature
         }
     }
-    
-    
-    func updateWeatherInfoLatitudeLongtitude(latitude: Double, longitude: Double) {
-        let session = URLSession.shared
-        guard let url = URL(string:
-                                "https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=f2085fa546a323d778ef788c6b934414&lang=uk") else {return}
-        let task = session.dataTask(with: url) { data, response, error in
-            guard error == nil, let data = data else { print("Data task = \(String(describing: error?.localizedDescription))")
-                return}
-            print("ответ сервера \(data)")
-            do {
-                let weather = try JSONDecoder().decode(WeatherData.self, from: data)
-                print(weather)
-                DispatchQueue.main.async {
-                    self.tempValueLabel.text = "\(weather.main.temp)"
-                    self.cityNameLabel.text = "\(weather.name), \(weather.sys.country)"
-                    self.weatherConditionsLabel.text = weather.weather.first?.description
-                }
-                
-            } catch {
-                print("\(String(describing: error.localizedDescription))")
-            }
-        }
-        task.resume()
-        
-    }
-    
 }
 
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let lastLocation = locations.last {
-            print(" this is \(lastLocation.coordinate)")
-            
+            latitude = lastLocation.coordinate.latitude
+            longitude = lastLocation.coordinate.longitude
+            refresh()
         }
     }
 }
@@ -168,3 +151,39 @@ extension ViewController: CLLocationManagerDelegate {
  }
  }
  */
+
+/*
+ @objc func updateWeatherInfo(){
+     print("YUra")
+     updateWeatherInfoLatitudeLongtitude(latitude: latitude, longitude: longitude)
+ }
+           searchButton.addTarget(self, action: #selector(updateWeatherInfo), for: .touchUpInside)
+
+ func updateWeatherInfoLatitudeLongtitude(latitude: Double, longitude: Double) {
+     let session = URLSession.shared
+     guard let url = URL(string:
+                             "https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=f2085fa546a323d778ef788c6b934414&lang=uk") else {return}
+     let task = session.dataTask(with: url) { data, response, error in
+         guard error == nil, let data = data else { print("Data task = \(String(describing: error?.localizedDescription))")
+             return}
+         print("ответ сервера \(data)")
+         do {
+             let weather = try JSONDecoder().decode(WeatherData.self, from: data)
+             print(weather)
+             DispatchQueue.main.async {
+                 self.tempValueLabel.text = "\(weather.main.temp)"
+                 self.cityNameLabel.text = "\(weather.name), \(weather.sys.country)"
+                 self.weatherConditionsLabel.text = weather.weather.first?.description
+             }
+             
+         } catch {
+             print("\(String(describing: error.localizedDescription))")
+         }
+     }
+     task.resume()
+     
+ }
+ 
+ */
+
+
