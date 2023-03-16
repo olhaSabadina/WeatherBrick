@@ -40,10 +40,10 @@ class ViewController: UIViewController {
         setInfoButton()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        refresh()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        refresh()
+//    }
     
     private func startLocationManager() {
         locationManager.requestWhenInUseAuthorization()
@@ -52,7 +52,9 @@ class ViewController: UIViewController {
                 self.locationManager.delegate = self
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
                 self.locationManager.pausesLocationUpdatesAutomatically = true
-                self.locationManager.startUpdatingHeading()
+                self.locationManager.startUpdatingLocation()
+                print("запуск GPS")
+                print(self.longitude, self.latitude)
             }
         }
     }
@@ -99,18 +101,18 @@ class ViewController: UIViewController {
     }
     
     private func refresh(){
+        print("refresh")
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()
-            self.locationManager.startUpdatingLocation()
         }
         fetchManager.fetchWeatherForCoordinates(latitude: latitude, longitude: longitude) { weather in
             DispatchQueue.main.async {
                 self.updateView(weather: weather)
                 self.activityIndicator.stopAnimating()
-                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 5){
-                    print("Stop location")
-                    self.locationManager.stopUpdatingLocation()
-                }
+//                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 5){
+//                    print("Stop location")
+//                    self.locationManager.stopUpdatingLocation()
+//                }
             }
         }
     }
@@ -141,7 +143,7 @@ class ViewController: UIViewController {
             print("windSpeed = \(windSpeed)")
             if windSpeed > 4 {
                 UIView.animate(withDuration: 2, delay: 1) {
-                    self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(30))
+                    self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(45))
                 }
             } else {
                 UIView.animate(withDuration: 2, delay: 1) {
@@ -157,64 +159,14 @@ extension ViewController: CLLocationManagerDelegate {
         if let lastLocation = locations.last {
             latitude = lastLocation.coordinate.latitude
             longitude = lastLocation.coordinate.longitude
+            print("gps определил коордтаты и записсал в переменные")
             refresh()
+            
         }
     }
 }
 
 
 
-
-/*
- func refresh(){
- DispatchQueue.main.async {
- self.activityIndicator.startAnimating()
- }
- fetchManager.fetchWeatherForCoordinates(latitude: latitude, longitude: longitude) { weather in
- DispatchQueue.main.async {
- self.updateView(weather: weather)
- self.activityIndicator.stopAnimating()
- DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 5){
- print("Stop location")
- self.locationManager.stopUpdatingLocation()
- }
- }
- }
- }
- */
-
-/*
- @objc func updateWeatherInfo(){
-     print("YUra")
-     updateWeatherInfoLatitudeLongtitude(latitude: latitude, longitude: longitude)
- }
-           searchButton.addTarget(self, action: #selector(updateWeatherInfo), for: .touchUpInside)
-
- func updateWeatherInfoLatitudeLongtitude(latitude: Double, longitude: Double) {
-     let session = URLSession.shared
-     guard let url = URL(string:
-                             "https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=f2085fa546a323d778ef788c6b934414&lang=uk") else {return}
-     let task = session.dataTask(with: url) { data, response, error in
-         guard error == nil, let data = data else { print("Data task = \(String(describing: error?.localizedDescription))")
-             return}
-         print("ответ сервера \(data)")
-         do {
-             let weather = try JSONDecoder().decode(WeatherData.self, from: data)
-             print(weather)
-             DispatchQueue.main.async {
-                 self.tempValueLabel.text = "\(weather.main.temp)"
-                 self.cityNameLabel.text = "\(weather.name), \(weather.sys.country)"
-                 self.weatherConditionsLabel.text = weather.weather.first?.description
-             }
-             
-         } catch {
-             print("\(String(describing: error.localizedDescription))")
-         }
-     }
-     task.resume()
-     
- }
- 
- */
 
 

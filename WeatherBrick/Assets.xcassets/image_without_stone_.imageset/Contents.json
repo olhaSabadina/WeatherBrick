@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "image_without_stone_.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
