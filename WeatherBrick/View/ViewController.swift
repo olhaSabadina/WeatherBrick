@@ -19,9 +19,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     private let locationManager = CLLocationManager()
     private var fetchManager = FetchWeatherManager()
+    private let refreshControl = UIRefreshControl()
     private var latitude: Double = 0 {
         didSet {
             print("широта \(latitude)")
@@ -38,12 +40,17 @@ class ViewController: UIViewController {
         startLocationManager()
         setSearchButton()
         setInfoButton()
+        setupRefreshControl()
     }
     
 //    override func viewWillAppear(_ animated: Bool) {
 //        super.viewWillAppear(animated)
 //        refresh()
 //    }
+    
+
+    
+    
     
     private func startLocationManager() {
         locationManager.requestWhenInUseAuthorization()
@@ -57,6 +64,12 @@ class ViewController: UIViewController {
                 print(self.longitude, self.latitude)
             }
         }
+    }
+    
+    @objc private func didPullToRefresh() {
+        refresh()
+       print("refreshControOk")
+        refreshControl.endRefreshing()
     }
     
     @objc func setInfoView(){
@@ -92,6 +105,11 @@ class ViewController: UIViewController {
         self.present(alertControler, animated: true)
     }
     
+    private func setupRefreshControl(){
+        scrollView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+    }
+    
     private func setInfoButton() {
         infoButton.addTarget(self, action: #selector(setInfoView), for: .touchUpInside)
     }
@@ -121,6 +139,7 @@ class ViewController: UIViewController {
             tempValueLabel.text = weather.temperature
             cityNameLabel.text = "\(weather.nameCity), \(weather.country)"
             weatherConditionsLabel.text = weather.description
+            indicationDegreeLabel.text = "℃"
             brickOnRopeImageView.image = UIImage(named: weather.image)
             windOfBrick(windSpeed: weather.wind)
             
@@ -133,6 +152,7 @@ class ViewController: UIViewController {
             tempValueLabel.text = ""
             cityNameLabel.text = "Not found"
             weatherConditionsLabel.text = ""
+            indicationDegreeLabel.text = ""
             brickOnRopeImageView.image = UIImage(named: "image_without_stone_")
             UIView.animate(withDuration: 2, delay: 1) {
                 self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0))
