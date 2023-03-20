@@ -8,7 +8,7 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController {
+class WeatherViewController: UIViewController {
     
     @IBOutlet weak var brickOnRopeImageView: UIImageView!
     @IBOutlet weak var tempValueLabel: UILabel!
@@ -174,7 +174,7 @@ class ViewController: UIViewController {
         
     }
 }
-extension ViewController: CLLocationManagerDelegate {
+extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let lastLocation = locations.last {
             latitude = lastLocation.coordinate.latitude
