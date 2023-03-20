@@ -150,7 +150,7 @@
                         <outlet property="infoButton" destination="szu-nS-7hP" id="ASu-x0-KIF"/>
                         <outlet property="scrollView" destination="eto-yF-pXt" id="5fv-Bq-s9P"/>
                         <outlet property="searchButton" destination="0tc-pC-MfJ" id="Kuq-Yb-y7i"/>
-                        <outlet property="tempValueLabel" destination="u4Q-3f-Mk7" id="cbm-gZ-XoD"/>
+                        <outlet property="temperatureValueLabel" destination="u4Q-3f-Mk7" id="cbm-gZ-XoD"/>
                         <outlet property="weatherConditionsLabel" destination="BgF-uc-gyv" id="3se-x9-FGm"/>
                     </connections>
                 </viewController>

@@ -13,8 +13,6 @@ struct FetchWeatherManager {
         let session = URLSession.shared
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=f2085fa546a323d778ef788c6b934414&units=metric&lang=uk") else {return}
         
-        print(url)
-        
         let task = session.dataTask(with: url) { (data, response, error) in
             
             guard error == nil, let data = data else {
@@ -67,7 +65,7 @@ struct FetchWeatherManager {
     }
     
     func parseJSON(data: Data) -> FinalWeather? {
-       
+        
         let decoder = JSONDecoder()
         
         do{

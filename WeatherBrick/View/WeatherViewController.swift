@@ -11,7 +11,7 @@ import CoreLocation
 class WeatherViewController: UIViewController {
     
     @IBOutlet weak var brickOnRopeImageView: UIImageView!
-    @IBOutlet weak var tempValueLabel: UILabel!
+    @IBOutlet weak var temperatureValueLabel: UILabel!
     @IBOutlet weak var indicationDegreeLabel: UILabel!
     @IBOutlet weak var weatherConditionsLabel: UILabel!
     @IBOutlet weak var iconLocationImageView: UIImageView!
@@ -43,15 +43,6 @@ class WeatherViewController: UIViewController {
         setupRefreshControl()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        refresh()
-//    }
-    
-
-    
-    
-    
     private func startLocationManager() {
         locationManager.requestWhenInUseAuthorization()
         DispatchQueue.global().async {
@@ -60,15 +51,12 @@ class WeatherViewController: UIViewController {
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
                 self.locationManager.pausesLocationUpdatesAutomatically = true
                 self.locationManager.startUpdatingLocation()
-                print("запуск GPS")
-                print(self.longitude, self.latitude)
             }
         }
     }
     
     @objc private func didPullToRefresh() {
         refresh()
-       print("refreshControOk")
         refreshControl.endRefreshing()
     }
     
@@ -87,7 +75,6 @@ class WeatherViewController: UIViewController {
             DispatchQueue.main.async {
                 self.activityIndicator.startAnimating()
             }
-            print(alertText)
             self.fetchManager.fetchWeatherForCityName(cityName: alertText ) { weather in
                 DispatchQueue.main.async {
                     self.updateView(weather: weather)
@@ -119,7 +106,6 @@ class WeatherViewController: UIViewController {
     }
     
     private func refresh(){
-        print("refresh")
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()
         }
@@ -127,16 +113,13 @@ class WeatherViewController: UIViewController {
             DispatchQueue.main.async {
                 self.updateView(weather: weather)
                 self.activityIndicator.stopAnimating()
-//                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 5){
-//                    print("Stop location")
-//                    self.locationManager.stopUpdatingLocation()
-//                }
             }
         }
     }
+    
     private func updateView(weather: FinalWeather?){
         if let weather = weather {
-            tempValueLabel.text = weather.temperature
+            temperatureValueLabel.text = weather.temperature
             cityNameLabel.text = "\(weather.nameCity), \(weather.country)"
             weatherConditionsLabel.text = weather.description
             indicationDegreeLabel.text = "℃"
@@ -149,7 +132,7 @@ class WeatherViewController: UIViewController {
                 brickOnRopeImageView.alpha = 1.0
             }
         } else {
-            tempValueLabel.text = ""
+            temperatureValueLabel.text = ""
             cityNameLabel.text = "Not found"
             weatherConditionsLabel.text = ""
             indicationDegreeLabel.text = ""
@@ -160,7 +143,6 @@ class WeatherViewController: UIViewController {
         }
         
         func windOfBrick(windSpeed: Double){
-            print("windSpeed = \(windSpeed)")
             if windSpeed > 4 {
                 UIView.animate(withDuration: 2, delay: 1) {
                     self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(45))
@@ -171,7 +153,6 @@ class WeatherViewController: UIViewController {
                 }
             }
         }
-        
     }
 }
 extension WeatherViewController: CLLocationManagerDelegate {
@@ -179,9 +160,7 @@ extension WeatherViewController: CLLocationManagerDelegate {
         if let lastLocation = locations.last {
             latitude = lastLocation.coordinate.latitude
             longitude = lastLocation.coordinate.longitude
-            print("gps определил коордтаты и записсал в переменные")
             refresh()
-            
         }
     }
 }
