@@ -14,7 +14,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var temperatureValueLabel: UILabel!
     @IBOutlet weak var indicationDegreeLabel: UILabel!
     @IBOutlet weak var weatherConditionsLabel: UILabel!
-    @IBOutlet weak var iconLocationImageView: UIImageView!
+    @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var infoButton: UIButton!
@@ -41,6 +41,7 @@ class WeatherViewController: UIViewController {
         setSearchButton()
         setInfoButton()
         setupRefreshControl()
+        setLocationButton()
     }
     
     private func startLocationManager() {
@@ -58,6 +59,10 @@ class WeatherViewController: UIViewController {
     @objc private func didPullToRefresh() {
         refresh()
         refreshControl.endRefreshing()
+    }
+    
+    @objc private func pullLocationButton() {
+        refresh()
     }
     
     @objc func setInfoView(){
@@ -95,6 +100,10 @@ class WeatherViewController: UIViewController {
     private func setupRefreshControl(){
         scrollView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+    }
+    
+    private func setLocationButton() {
+        locationButton.addTarget(self, action: #selector(pullLocationButton), for: .touchUpInside)
     }
     
     private func setInfoButton() {
