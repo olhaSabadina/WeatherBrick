@@ -44,6 +44,13 @@ class WeatherViewController: UIViewController {
         setLocationButton()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if latitude != 0 {
+            refresh()
+        }
+    }
+    
     private func startLocationManager() {
         locationManager.requestWhenInUseAuthorization()
         DispatchQueue.global().async {
@@ -61,7 +68,7 @@ class WeatherViewController: UIViewController {
         refreshControl.endRefreshing()
     }
     
-    @objc private func pullLocationButton() {
+    @objc private func pressLocationButton() {
         refresh()
     }
     
@@ -103,7 +110,7 @@ class WeatherViewController: UIViewController {
     }
     
     private func setLocationButton() {
-        locationButton.addTarget(self, action: #selector(pullLocationButton), for: .touchUpInside)
+        locationButton.addTarget(self, action: #selector(pressLocationButton), for: .touchUpInside)
     }
     
     private func setInfoButton() {
@@ -164,12 +171,12 @@ class WeatherViewController: UIViewController {
         }
     }
 }
+
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let lastLocation = locations.last {
             latitude = lastLocation.coordinate.latitude
             longitude = lastLocation.coordinate.longitude
-            refresh()
         }
     }
 }
