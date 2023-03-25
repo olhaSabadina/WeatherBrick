@@ -14,7 +14,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var temperatureValueLabel: UILabel!
     @IBOutlet weak var indicationDegreeLabel: UILabel!
     @IBOutlet weak var weatherConditionsLabel: UILabel!
-    @IBOutlet weak var iconLocationImageView: UIImageView!
+    @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var infoButton: UIButton!
@@ -41,6 +41,14 @@ class WeatherViewController: UIViewController {
         setSearchButton()
         setInfoButton()
         setupRefreshControl()
+        setLocationButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if latitude != 0 {
+            refresh()
+        }
     }
     
     private func startLocationManager() {
@@ -58,6 +66,10 @@ class WeatherViewController: UIViewController {
     @objc private func didPullToRefresh() {
         refresh()
         refreshControl.endRefreshing()
+    }
+    
+    @objc private func pressLocationButton() {
+        refresh()
     }
     
     @objc func setInfoView(){
@@ -95,6 +107,10 @@ class WeatherViewController: UIViewController {
     private func setupRefreshControl(){
         scrollView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+    }
+    
+    private func setLocationButton() {
+        locationButton.addTarget(self, action: #selector(pressLocationButton), for: .touchUpInside)
     }
     
     private func setInfoButton() {
@@ -155,12 +171,12 @@ class WeatherViewController: UIViewController {
         }
     }
 }
+
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let lastLocation = locations.last {
             latitude = lastLocation.coordinate.latitude
             longitude = lastLocation.coordinate.longitude
-            refresh()
         }
     }
 }
