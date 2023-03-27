@@ -24,6 +24,7 @@ class WeatherViewController: UIViewController {
     private let locationManager = CLLocationManager()
     private var fetchManager = FetchWeatherManager()
     private let refreshControl = UIRefreshControl()
+    
     private var latitude: Double = 0 {
         didSet {
             print("широта \(latitude)")
