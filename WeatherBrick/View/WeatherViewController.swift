@@ -23,7 +23,6 @@ class WeatherViewController: UIViewController {
     
     private let locationManager = CLLocationManager()
     private var fetchManager = FetchWeatherManager()
-//    private let refreshControl = UIRefreshControl()
     
     private var latitude: Double = 0 {
         didSet {
@@ -41,17 +40,14 @@ class WeatherViewController: UIViewController {
         startLocationManager()
         setSearchButton()
         setInfoButton()
-//        setupRefreshControl()
         setLocationButton()
         scrollView.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        if latitude != 0 {
             refresh()
         scrollView.contentInset = .init(top: 10, left: 0, bottom: 0, right: 0)
-//        }
     }
     
     private func startLocationManager() {
@@ -65,11 +61,6 @@ class WeatherViewController: UIViewController {
             }
         }
     }
-    
-//    @objc private func didPullToRefresh() {
-//        refresh()
-//        refreshControl.endRefreshing()
-//    }
     
     @objc private func pressLocationButton() {
         refresh()
@@ -106,11 +97,6 @@ class WeatherViewController: UIViewController {
         alertControler.addAction(alertCancel)
         self.present(alertControler, animated: true)
     }
-    
-//    private func setupRefreshControl(){
-//        scrollView.refreshControl = refreshControl
-//        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-//    }
     
     private func setLocationButton() {
         locationButton.addTarget(self, action: #selector(pressLocationButton), for: .touchUpInside)
@@ -191,27 +177,12 @@ extension WeatherViewController: CLLocationManagerDelegate {
 }
 
 extension WeatherViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset, "offset")
-        if scrollView.contentOffset.y == -10 {
-            print("vozvrat scrolla")
-            //print(scrollView.contentOffset, "offset")
-        }
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate {
-            print("fin + end")
-        }
-    }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        print("endeeeeed")
         scrollView.setContentOffset(.zero, animated: true)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        print("start")
         refresh()
     }
 }
