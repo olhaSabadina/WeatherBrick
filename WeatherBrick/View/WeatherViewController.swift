@@ -23,17 +23,8 @@ class WeatherViewController: UIViewController {
     
     private let locationManager = CLLocationManager()
     private var fetchManager = FetchWeatherManager()
-    
-    private var latitude: Double = 0 {
-        didSet {
-            print("широта \(latitude)")
-        }
-    }
-    private var longitude: Double = 0 {
-        didSet {
-            print("долгота \(longitude)")
-        }
-    }
+    private var latitude: Double = 0
+    private var longitude: Double = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,8 +37,39 @@ class WeatherViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-            refresh()
+        refreshData()
         scrollView.contentInset = .init(top: 10, left: 0, bottom: 0, right: 0)
+    }
+    
+    @objc private func pressLocationButton() {
+        refreshData()
+    }
+    
+    @objc func setInfoView(){
+        let infoViwe = InfoView()
+        view.addSubview(infoViwe)
+    }
+    
+    @objc func setAlertControler(){
+        let alertControler = UIAlertController(title: "You can selected city", message: "Enter city name", preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default){ action in
+            guard let cityAlertText = alertControler.textFields?.first?.text else {return}
+            self.isActivityAnimatingStart(true)
+            self.fetchManager.fetchWeatherForCityName(cityName: cityAlertText ) { weather in
+                DispatchQueue.main.async {
+                    self.updateView(weather: weather)
+                    self.isActivityAnimatingStart(false)
+                }
+            }
+        }
+        let alertCancel = UIAlertAction(title: "Cancel", style: .destructive)
+        
+        alertControler.addTextField { textField in
+            textField.placeholder = "Enter city name"
+        }
+        alertControler.addAction(alertAction)
+        alertControler.addAction(alertCancel)
+        self.present(alertControler, animated: true)
     }
     
     private func startLocationManager() {
@@ -62,42 +84,6 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    @objc private func pressLocationButton() {
-        refresh()
-    }
-    
-    @objc func setInfoView(){
-        let infoViwe = InfoView()
-        view.addSubview(infoViwe)
-    }
-    
-    @objc func setAlertControler(){
-        let alertControler = UIAlertController(title: "You can selected city", message: "Enter city name", preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "OK", style: .default){ action in
-            guard let alertText = alertControler.textFields?.first?.text else {
-                print("please enter cityName")
-                return
-            }
-            DispatchQueue.main.async {
-                self.activityIndicator.startAnimating()
-            }
-            self.fetchManager.fetchWeatherForCityName(cityName: alertText ) { weather in
-                DispatchQueue.main.async {
-                    self.updateView(weather: weather)
-                    self.activityIndicator.stopAnimating()
-                }
-            }
-        }
-        let alertCancel = UIAlertAction(title: "Cancel", style: .destructive)
-        
-        alertControler.addTextField { textField in
-            textField.placeholder = "Enter city name"
-        }
-        alertControler.addAction(alertAction)
-        alertControler.addAction(alertCancel)
-        self.present(alertControler, animated: true)
-    }
-    
     private func setLocationButton() {
         locationButton.addTarget(self, action: #selector(pressLocationButton), for: .touchUpInside)
     }
@@ -110,20 +96,47 @@ class WeatherViewController: UIViewController {
         searchButton.addTarget(self, action: #selector(setAlertControler), for: .touchUpInside)
     }
     
-    private func refresh(){
+    private func refreshData(){
         guard latitude != 0 else {return}
-        DispatchQueue.main.async {
-            self.activityIndicator.startAnimating()
-        }
+        isActivityAnimatingStart(true)
         fetchManager.fetchWeatherForCoordinates(latitude: latitude, longitude: longitude) { weather in
             DispatchQueue.main.async {
                 self.updateView(weather: weather)
-                self.activityIndicator.stopAnimating()
+                self.isActivityAnimatingStart(false)
             }
         }
     }
     
-    private func updateView(weather: FinalWeather?){
+    private func isActivityAnimatingStart(_ animating: Bool){
+        if animating {
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
+        } else {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+    
+    private func alertCityNotFound() {
+        let alertNotFound = UIAlertController(title: "City not found", message: "Try input another City\nPlease!\nOr check internet connection!", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alertNotFound.addAction(action)
+        present(alertNotFound, animated: true)
+    }
+    
+    private func windOfBrick(windSpeed: Double){
+        if windSpeed > 4 {
+            UIView.animate(withDuration: 3, delay: 1.5, options: [.repeat, .autoreverse, .curveEaseInOut]) {
+                self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0.3))
+            }
+        } else {
+            UIView.animate(withDuration: 2, delay: 1) {
+                self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0))
+            }
+        }
+    }
+    
+    private func updateView(weather: WeatherModel?){
         if let weather = weather {
             temperatureValueLabel.text = weather.temperature
             cityNameLabel.text = "\(weather.nameCity), \(weather.country)"
@@ -146,23 +159,7 @@ class WeatherViewController: UIViewController {
             UIView.animate(withDuration: 2, delay: 1) {
                 self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0))
             }
-            
-            let alertNotFound = UIAlertController(title: "City not find", message: "Try input another City\nPlease!\nOr check internet connection!", preferredStyle: .alert)
-            let action = UIAlertAction(title: "OK", style: .cancel)
-            alertNotFound.addAction(action)
-            present(alertNotFound, animated: true)
-        }
-        
-        func windOfBrick(windSpeed: Double){
-            if windSpeed > 4 {
-                UIView.animate(withDuration: 3, delay: 1.5, options: [.repeat, .autoreverse, .curveEaseInOut]) {
-                    self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0.3))
-                }
-            } else {
-                UIView.animate(withDuration: 2, delay: 1) {
-                    self.brickOnRopeImageView.transform = CGAffineTransformMakeRotation(CGFloat(0))
-                }
-            }
+            alertCityNotFound()
         }
     }
 }
@@ -183,7 +180,7 @@ extension WeatherViewController: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        refresh()
+        refreshData()
     }
 }
 
