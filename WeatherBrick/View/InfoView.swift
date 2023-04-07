@@ -8,25 +8,25 @@
 import UIKit
 
 class InfoView: UIView {
-
+    
     private var shadowLayer: CAShapeLayer!
     private var cornerRadius: CGFloat = 25.0
     private var fillColor: UIColor = .blue
     
-    let color = #colorLiteral(red: 0.5763047668, green: 0.2355876396, blue: 0.05401653666, alpha: 1)
-    let imageView = UIImageView()
-    let containerView = UIView()
-    let closeButton = UIButton()
+    private let colorShadow = #colorLiteral(red: 0.5763047668, green: 0.2355876396, blue: 0.05401653666, alpha: 1)
+    private let imageView = UIImageView()
+    private let containerView = UIView()
+    private let closeButton = UIButton()
     
-    let infoLabel: UILabel = {
-       let label = UILabel()
+    private let infoLabel: UILabel = {
+        let label = UILabel()
         label.font = .systemFont(ofSize: 24)
         label.text = "INFO"
         label.textAlignment = .center
         return label
     }()
     
-    let textInfoLabel: UILabel = {
+    private let textInfoLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18)
         label.text = """
@@ -49,8 +49,8 @@ class InfoView: UIView {
         return label
     }()
     
-    lazy var stack: UIStackView = {
-       let stack = UIStackView(arrangedSubviews: [infoLabel,textInfoLabel])
+    lazy var infoStateBrickStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [infoLabel,textInfoLabel])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.spacing = 25
@@ -59,26 +59,26 @@ class InfoView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         backgroundColor = .white
         self.frame = UIScreen.main.bounds
         setupView()
         setupButton()
     }
     
-    func setupView(){
+    private func setupView(){
         addSubview(imageView)
         imageView.image = UIImage(named: "image_background")
         imageView.frame = self.frame
         
         addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(stack)
+        containerView.addSubview(infoStateBrickStack)
         containerView.backgroundColor = .systemOrange
-        containerView.addShadow(cornerRadius: 25 ,offset: CGSize(width: 5, height: 2), color: color, radius: 1, opacity: 1)
+        containerView.addShadow(cornerRadius: 25 ,offset: CGSize(width: 5, height: 2), color: colorShadow, radius: 1, opacity: 1)
     }
     
-    func setupButton(){
+    private func setupButton(){
         containerView.addSubview(closeButton)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.setTitle("Hide", for: .normal)
@@ -105,21 +105,21 @@ class InfoView: UIView {
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             containerView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.78),
             containerView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.7),
-          
+            
             closeButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             closeButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),
             closeButton.widthAnchor.constraint(equalToConstant: 150),
             closeButton.heightAnchor.constraint(equalToConstant: 40),
             
-            stack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            stack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            stack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+            infoStateBrickStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            infoStateBrickStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            infoStateBrickStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
         ])
     }
 }
 
 extension UIView {
-   
+    
     func addShadow(cornerRadius: CGFloat, offset: CGSize, color: UIColor, radius: CGFloat, opacity: Float) {
         layer.cornerRadius = cornerRadius
         layer.shadowColor = color.cgColor
@@ -137,5 +137,4 @@ extension UIView {
         layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
         layer.shadowRadius = shadowRadius
     }
-
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FinalWeather {
+struct WeatherModel {
     
     var nameCity: String
     var temperature: String
