@@ -1,0 +1,4 @@
+
+
+{"coord":{"lon":-0.1257,"lat":51.5085},"weather":[{"id":803,"main":"Clouds","description":"рвані хмари","icon":"04d"}],"base":"stations","main":{"temp":12.98,"feels_like":11.82,"temp_min":11.59,"temp_max":14.04,"pressure":1011,"humidity":57},"visibility":10000,"wind":{"speed":5.14,"deg":230},"clouds":{"all":75},"dt":1681212633,"sys":{"type":2,"id":2075535,"country":"GB","sunrise":1681190049,"sunset":1681238922},"timezone":3600,"id":2643743,"name":"London","cod":200}
+
