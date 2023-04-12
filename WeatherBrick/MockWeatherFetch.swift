@@ -23,13 +23,11 @@ class MockWeatherFetchManager: FetchWeatherProtocol {
         } catch let error as NSError {
             print(error.localizedDescription)
         }
-        
     }
     
     func fetchWeatherForCityName(cityName: String, completionhandler: @escaping (WeatherModel?) -> ()) {
         
         let url = Bundle.main.url(forResource: "MockLondon", withExtension: "json")
-        print(url!)
         guard let data = try? Data(contentsOf: url!) else {return}
         
         do {
@@ -41,7 +39,6 @@ class MockWeatherFetchManager: FetchWeatherProtocol {
         } catch let error as NSError {
             print(error.localizedDescription)
         }
-        
     }
     
 }

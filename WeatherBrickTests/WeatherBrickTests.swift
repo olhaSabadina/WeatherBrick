@@ -24,18 +24,9 @@ final class WeatherBrickTests: XCTestCase {
             XCTAssertEqual(weather.temp, 12.98)
         })
     }
-
+    
     func testFoundWeatherForCoordinates() throws {
-        
-//        який спосіб кращий: цей що закоментований чи той що з expectation?
-        
-//        await weatherBrickViewController.fetchManager?.fetchWeatherForCoordinates(latitude: 50.4333, longitude: 30.5167, completionhandler: { weatherModel in
-//            guard let weather = weatherModel else {return}
-//            XCTAssertEqual(weather.temp, 16.48)
-//            XCTAssert(weather.nameCity == "Kyiv")
-//            XCTAssertFalse(weather.wind == 10)
-//        })
-        
+                
         let expectation = expectation(description: "Weather data parsing for coordinates and found Kyiv ")
         var weather: WeatherModel?
         weatherBrickViewController.fetchManager?.fetchWeatherForCoordinates(latitude: 50.4333, longitude: 30.5167, completionhandler: { weatherModel in

@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sb = UIStoryboard(name: "Main", bundle: nil)
         window?.rootViewController = sb.instantiateViewController(identifier: "weather") { coder in
 //            return WeatherViewController(coder: coder, fechManager: FetchWeatherManager())
-// для тестування назначили мок менеджер
+// для тестування назначили мок менеджер але як на мене повинно бути якесь інше рішення
             return WeatherViewController(coder: coder, fechManager: MockWeatherFetchManager())
             
         }
