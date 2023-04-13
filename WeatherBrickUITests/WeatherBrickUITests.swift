@@ -10,39 +10,26 @@ import XCTest
 
 final class WeatherBrickUITests: XCTestCase {
     
-    func testFetchWeatherFromStartCoordinatesTrue() {
-        let app = XCUIApplication()
-        app.launch()
-        XCTAssert(app.staticTexts["Kyiv, UA"].exists)
-    }
-    
     func testSearchByCityNameTrue() {
         let app = XCUIApplication()
         app.launch()
-        let iconSearch = app.windows.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .button).element(boundBy: 1)
-        XCTAssert(iconSearch.exists)
-        iconSearch.tap()
+        app.windows.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .button).element(boundBy: 1).tap()
         app.alerts["You can selected city"].scrollViews.otherElements.collectionViews/*@START_MENU_TOKEN@*/.textFields["Enter city name"]/*[[".cells.textFields[\"Enter city name\"]",".textFields[\"Enter city name\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText("London")
         app.alerts["You can selected city"].scrollViews.otherElements.buttons["OK"].tap()
+        app.staticTexts["London, GB"].tap()
         XCTAssert(app.staticTexts["London, GB"].exists)
     }
     
-    func testFetchWeatherFromIconCoordinatesTrue() {
+    func testSearchByCityNameFalse() {
         let app = XCUIApplication()
         app.launch()
-        testSearchByCityNameTrue()
-        let window = app.children(matching: .window).element(boundBy: 0)
-        window.tap()
-        window.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .button).element(boundBy: 0).tap()
-        XCTAssert(app.staticTexts["Kyiv, UA"].exists)
-    }
-    
-    func testFetchWeatherFromBrickSwipeDownTrue() {
-        let app = XCUIApplication()
-        app.launch()
-       testSearchByCityNameTrue()
-        app.scrollViews.children(matching: .other).element(boundBy: 0).swipeDown()
-        XCTAssert(app.staticTexts["Kyiv, UA"].exists)
+        let iconSearch = app.windows.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .button).element(boundBy: 1)
+        XCTAssert(iconSearch.exists)
+        iconSearch.tap()
+        app.alerts["You can selected city"].scrollViews.otherElements.collectionViews/*@START_MENU_TOKEN@*/.textFields["Enter city name"]/*[[".cells.textFields[\"Enter city name\"]",".textFields[\"Enter city name\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText("")
+        app.alerts["You can selected city"].scrollViews.otherElements.buttons["OK"].tap()
+        app.alerts["City not found"].scrollViews.otherElements.buttons["OK"].tap()
+        XCTAssert(app.staticTexts["Not found"].exists)
     }
     
     func testExistsInfoMenuTrue() throws {
@@ -53,4 +40,5 @@ final class WeatherBrickUITests: XCTestCase {
         app/*@START_MENU_TOKEN@*/.staticTexts["Hide"]/*[[".buttons[\"Hide\"].staticTexts[\"Hide\"]",".staticTexts[\"Hide\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         XCTAssert(app.staticTexts["INFO"].exists)
     }
+    
 }

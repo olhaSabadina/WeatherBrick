@@ -106,7 +106,7 @@ class WeatherViewController: UIViewController {
     }
     
     private func refreshData(){
-//        guard latitude != 0 else {return}
+        guard latitude != 0 else {return}
         isActivityAnimatingStart(true)
         fetchManager?.fetchWeatherForCoordinates(latitude: latitude, longitude: longitude) { weather in
             DispatchQueue.main.async {

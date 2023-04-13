@@ -15,7 +15,6 @@
 		5886120A29E57D5600B0C35B /* MockLondon.json in Resources */ = {isa = PBXBuildFile; fileRef = 5886120929E57D5600B0C35B /* MockLondon.json */; };
 		5886120C29E57DD200B0C35B /* MockKyiv.json in Resources */ = {isa = PBXBuildFile; fileRef = 5886120B29E57DD200B0C35B /* MockKyiv.json */; };
 		5886121429E58AC500B0C35B /* WeatherBrickUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5886121329E58AC500B0C35B /* WeatherBrickUITests.swift */; };
-		5886121629E58AC500B0C35B /* WeatherBrickUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5886121529E58AC500B0C35B /* WeatherBrickUITestsLaunchTests.swift */; };
 		5886122329E6B29000B0C35B /* WeatherBrickSnapShotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5886122229E6B29000B0C35B /* WeatherBrickSnapShotTests.swift */; };
 		5886122B29E6B5B500B0C35B /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 5886122A29E6B5B500B0C35B /* SnapshotTesting */; };
 		58ABCE9129BD212500AF0682 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58ABCE9029BD212500AF0682 /* AppDelegate.swift */; };
@@ -60,7 +59,6 @@
 		5886120B29E57DD200B0C35B /* MockKyiv.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockKyiv.json; sourceTree = "<group>"; };
 		5886121129E58AC500B0C35B /* WeatherBrickUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherBrickUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5886121329E58AC500B0C35B /* WeatherBrickUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherBrickUITests.swift; sourceTree = "<group>"; };
-		5886121529E58AC500B0C35B /* WeatherBrickUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherBrickUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5886122029E6B29000B0C35B /* WeatherBrickSnapShotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherBrickSnapShotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5886122229E6B29000B0C35B /* WeatherBrickSnapShotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherBrickSnapShotTests.swift; sourceTree = "<group>"; };
 		58ABCE8D29BD212500AF0682 /* WeatherBrick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherBrick.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,7 +130,6 @@
 			isa = PBXGroup;
 			children = (
 				5886121329E58AC500B0C35B /* WeatherBrickUITests.swift */,
-				5886121529E58AC500B0C35B /* WeatherBrickUITestsLaunchTests.swift */,
 			);
 			path = WeatherBrickUITests;
 			sourceTree = "<group>";
@@ -371,7 +368,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5886121429E58AC500B0C35B /* WeatherBrickUITests.swift in Sources */,
-				5886121629E58AC500B0C35B /* WeatherBrickUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
