@@ -7,7 +7,7 @@
 
 import Foundation
 
-class WeatherFetchManager: FetchWeatherProtocol {
+class DefiniteWeatherFetchManager: FetchWeatherProtocol {
     
     func fetchWeatherForCoordinates(latitude: Double, longitude: Double, completionhandler: @escaping (WeatherModel?) -> ()) {
         let url = Bundle.main.url(forResource: "MockKyiv", withExtension: "json")

@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         let sb = UIStoryboard(name: "Main", bundle: nil)
         window?.rootViewController = sb.instantiateViewController(identifier: "weather") { coder in
-            return WeatherViewController(coder: coder, fechManager: FetchWeatherManager())
+            return WeatherViewController(coder: coder)
         }
         
         self.window?.makeKeyAndVisible()

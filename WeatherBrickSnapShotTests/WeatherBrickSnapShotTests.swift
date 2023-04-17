@@ -11,7 +11,7 @@ class WeatherViewControllerTests: XCTestCase {
     
     override func setUp() {
         vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "weather", creator: { coder in
-            WeatherViewController(coder: coder, fechManager: MockWeatherFetchManager())
+            WeatherViewController(coder: coder)
         })
     }
     

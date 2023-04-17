@@ -22,18 +22,9 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     
     private let locationManager = CLLocationManager()
-    public var fetchManager: FetchWeatherProtocol?
+    public var fetchManager: FetchWeatherProtocol? = FetchWeatherManager()
     private var latitude: Double = 0
     private var longitude: Double = 0
-    
-    init?(coder: NSCoder, fechManager: FetchWeatherProtocol) {
-        self.fetchManager = fechManager
-        super.init(coder: coder)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

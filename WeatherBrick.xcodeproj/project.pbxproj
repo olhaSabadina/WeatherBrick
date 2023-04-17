@@ -11,7 +11,7 @@
 		5812A4F529BF59FB002717F9 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5812A4F429BF59FB002717F9 /* WeatherModel.swift */; };
 		5812A4F729BF5AAE002717F9 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5812A4F629BF5AAE002717F9 /* InfoView.swift */; };
 		5812A4FB29BFBA54002717F9 /* FetchWeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5812A4FA29BFBA54002717F9 /* FetchWeatherManager.swift */; };
-		5886120629E4B74800B0C35B /* MockWeatherFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58ADA3B529E3EBFA00121EC9 /* MockWeatherFetch.swift */; };
+		5886120629E4B74800B0C35B /* DefiniteWeatherFetchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58ADA3B529E3EBFA00121EC9 /* DefiniteWeatherFetchManager.swift */; };
 		5886120A29E57D5600B0C35B /* MockLondon.json in Resources */ = {isa = PBXBuildFile; fileRef = 5886120929E57D5600B0C35B /* MockLondon.json */; };
 		5886120C29E57DD200B0C35B /* MockKyiv.json in Resources */ = {isa = PBXBuildFile; fileRef = 5886120B29E57DD200B0C35B /* MockKyiv.json */; };
 		5886121429E58AC500B0C35B /* WeatherBrickUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5886121329E58AC500B0C35B /* WeatherBrickUITests.swift */; };
@@ -71,7 +71,7 @@
 		58ABCE9E29BD212700AF0682 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		58ADA3A529E2B38000121EC9 /* WeatherBrickTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherBrickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		58ADA3A729E2B38000121EC9 /* WeatherBrickTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherBrickTests.swift; sourceTree = "<group>"; };
-		58ADA3B529E3EBFA00121EC9 /* MockWeatherFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWeatherFetch.swift; sourceTree = "<group>"; };
+		58ADA3B529E3EBFA00121EC9 /* DefiniteWeatherFetchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefiniteWeatherFetchManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,7 +171,7 @@
 				58ABCE9229BD212500AF0682 /* SceneDelegate.swift */,
 				5812A4F829BF5C87002717F9 /* View */,
 				58ADA3AE29E31FA000121EC9 /* Mock */,
-				58ADA3B529E3EBFA00121EC9 /* MockWeatherFetch.swift */,
+				58ADA3B529E3EBFA00121EC9 /* DefiniteWeatherFetchManager.swift */,
 				5812A4F929BF5D0C002717F9 /* Managers */,
 				58ABCE9629BD212500AF0682 /* Main.storyboard */,
 				58ABCE9929BD212700AF0682 /* Assets.xcassets */,
@@ -388,7 +388,7 @@
 				58ABCE9129BD212500AF0682 /* AppDelegate.swift in Sources */,
 				5812A4F329BF5005002717F9 /* WeatherData.swift in Sources */,
 				5812A4F529BF59FB002717F9 /* WeatherModel.swift in Sources */,
-				5886120629E4B74800B0C35B /* MockWeatherFetch.swift in Sources */,
+				5886120629E4B74800B0C35B /* DefiniteWeatherFetchManager.swift in Sources */,
 				5812A4F729BF5AAE002717F9 /* InfoView.swift in Sources */,
 				58ABCE9329BD212500AF0682 /* SceneDelegate.swift in Sources */,
 			);

@@ -9,15 +9,12 @@ import XCTest
 @testable import WeatherBrick
 
 final class WeatherBrickTests: XCTestCase {
-
-    let weatherBrickViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "weather") { coder in
-        return WeatherViewController(coder: coder, fechManager: MockWeatherFetchManager())
-    }
     
+    let sut = DefiniteWeatherFetchManager()
 
-    func testFoundWeatherForCityName() async throws {
+    func testFoundWeatherForCityName() throws {
         
-        await weatherBrickViewController.fetchManager?.fetchWeatherForCityName(cityName: "Testing city should be London", completionhandler: { weatherModel in
+        sut.fetchWeatherForCityName(cityName: "Testing city should be London", completionhandler: { weatherModel in
             guard let weather = weatherModel else {return}
             
             XCTAssert(weather.nameCity == "London")
@@ -29,7 +26,7 @@ final class WeatherBrickTests: XCTestCase {
                 
         let expectation = expectation(description: "Weather data parsing for coordinates and found Kyiv ")
         var weather: WeatherModel?
-        weatherBrickViewController.fetchManager?.fetchWeatherForCoordinates(latitude: 50.4333, longitude: 30.5167, completionhandler: { weatherModel in
+        sut.fetchWeatherForCoordinates(latitude: 50.4333, longitude: 30.5167, completionhandler: { weatherModel in
             weather = weatherModel
             expectation.fulfill()
         })
