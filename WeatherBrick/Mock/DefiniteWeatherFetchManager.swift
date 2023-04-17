@@ -18,8 +18,12 @@ class DefiniteWeatherFetchManager: FetchWeatherProtocol {
             
             guard let weatherModel = WeatherModel(weatherData: weatherData) else
             {return}
-            
+            print("123")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             completionhandler(weatherModel)
+              print("456")
+          }
+            print("130")
         } catch let error as NSError {
             print(error.localizedDescription)
         }

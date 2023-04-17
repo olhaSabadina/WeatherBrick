@@ -1,8 +1,8 @@
 //
-//  WeatherBrickTests.swift
+//  WeatherBrickTests2.swift
 //  WeatherBrickTests
 //
-//  Created by Olya Sabadina on 2023-04-09.
+//  Created by Olya Sabadina on 2023-04-17.
 //
 
 import XCTest
@@ -10,29 +10,34 @@ import XCTest
 
 final class WeatherBrickTests: XCTestCase {
     
-    let sut = DefiniteWeatherFetchManager()
-
-    func testFoundWeatherForCityName() throws {
+    let sut = FetchWeatherManager()
+    
+    func testFetchWeatherForCityNameTrue() {
+        let expectation = expectation(description: "city")
+        var weatherData : WeatherModel?
         
-        sut.fetchWeatherForCityName(cityName: "Testing city should be London", completionhandler: { weatherModel in
-            guard let weather = weatherModel else {return}
-            
-            XCTAssert(weather.nameCity == "London")
-            XCTAssertEqual(weather.temp, 12.98)
-        })
+        sut.fetchWeatherForCityName(cityName: "London") { weather in
+            guard let weather = weather else {return}
+            print(weather.nameCity, "внутри теста")
+            weatherData = weather
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+        XCTAssert(weatherData?.nameCity == "London")
     }
     
-    func testFoundWeatherForCoordinates() throws {
-                
-        let expectation = expectation(description: "Weather data parsing for coordinates and found Kyiv ")
-        var weather: WeatherModel?
-        sut.fetchWeatherForCoordinates(latitude: 50.4333, longitude: 30.5167, completionhandler: { weatherModel in
-            weather = weatherModel
+    func testFetchWeatherForCoordinatesTrue() {
+        let expectation = expectation(description: "Weather for coordinates")
+        var weatherData : WeatherModel?
+        
+        sut.fetchWeatherForCoordinates(latitude: 48.8534, longitude: 2.3488) { weather in
+            guard let weather = weather else {return}
+            print(weather.nameCity, "внутри теста lonlat")
+            weatherData = weather
             expectation.fulfill()
-        })
-        XCTAssertNotNil(weather)
-        waitForExpectations(timeout: 15)
-        XCTAssert(weather?.nameCity == "Kyiv")
-        XCTAssertEqual(weather?.temp, 16.48)
+        }
+        waitForExpectations(timeout: 5)
+        XCTAssert(weatherData?.nameCity == "Paris")
     }
+    
 }

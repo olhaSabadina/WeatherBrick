@@ -14,14 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-        guard let scene = (scene as? UIWindowScene) else { return }
-        window = UIWindow(windowScene: scene)
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        window?.rootViewController = sb.instantiateViewController(identifier: "weather") { coder in
-            return WeatherViewController(coder: coder)
-        }
-        
-        self.window?.makeKeyAndVisible()
+        guard (scene is UIWindowScene) else { return }
     }
     
     
