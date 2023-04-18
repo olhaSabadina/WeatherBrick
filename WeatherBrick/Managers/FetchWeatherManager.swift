@@ -61,7 +61,7 @@ struct FetchWeatherManager: FetchWeatherProtocol {
         task.resume()
     }
     
-    func parseJSON(data: Data) -> WeatherModel? {
+    private func parseJSON(data: Data) -> WeatherModel? {
         
         let decoder = JSONDecoder()
         
