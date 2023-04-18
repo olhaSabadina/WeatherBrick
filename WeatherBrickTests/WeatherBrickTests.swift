@@ -18,7 +18,6 @@ final class WeatherBrickTests: XCTestCase {
         
         sut.fetchWeatherForCityName(cityName: "London") { weather in
             guard let weather = weather else {return}
-            print(weather.nameCity, "внутри теста")
             weatherData = weather
             expectation.fulfill()
         }
@@ -32,7 +31,6 @@ final class WeatherBrickTests: XCTestCase {
         
         sut.fetchWeatherForCoordinates(latitude: 48.8534, longitude: 2.3488) { weather in
             guard let weather = weather else {return}
-            print(weather.nameCity, "внутри теста lonlat")
             weatherData = weather
             expectation.fulfill()
         }
