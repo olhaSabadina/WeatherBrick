@@ -7,7 +7,15 @@
 
 import Foundation
 
-struct FetchWeatherManager {
+protocol FetchWeatherProtocol {
+    
+    func fetchWeatherForCoordinates(latitude: Double, longitude: Double, completionhandler: @escaping (WeatherModel?)->())
+    
+    func fetchWeatherForCityName(cityName: String, completionhandler: @escaping (WeatherModel?)->())
+    
+}
+
+struct FetchWeatherManager: FetchWeatherProtocol {
     
     func fetchWeatherForCoordinates(latitude: Double, longitude: Double, completionhandler: @escaping (WeatherModel?)->()){
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=f2085fa546a323d778ef788c6b934414&units=metric&lang=uk") else {return}
@@ -53,7 +61,7 @@ struct FetchWeatherManager {
         task.resume()
     }
     
-    func parseJSON(data: Data) -> WeatherModel? {
+    private func parseJSON(data: Data) -> WeatherModel? {
         
         let decoder = JSONDecoder()
         

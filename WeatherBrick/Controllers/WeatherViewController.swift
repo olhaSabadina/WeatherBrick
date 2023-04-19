@@ -22,7 +22,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     
     private let locationManager = CLLocationManager()
-    private var fetchManager = FetchWeatherManager()
+    public var fetchManager: FetchWeatherProtocol? = FetchWeatherManager()
     private var latitude: Double = 0
     private var longitude: Double = 0
     
@@ -55,7 +55,7 @@ class WeatherViewController: UIViewController {
         let alertAction = UIAlertAction(title: "OK", style: .default){ action in
             guard let cityAlertText = alertControler.textFields?.first?.text else {return}
             self.isActivityAnimatingStart(true)
-            self.fetchManager.fetchWeatherForCityName(cityName: cityAlertText ) { weather in
+            self.fetchManager?.fetchWeatherForCityName(cityName: cityAlertText ) { weather in
                 DispatchQueue.main.async {
                     self.updateView(weather: weather)
                     self.isActivityAnimatingStart(false)
@@ -99,7 +99,7 @@ class WeatherViewController: UIViewController {
     private func refreshData(){
         guard latitude != 0 else {return}
         isActivityAnimatingStart(true)
-        fetchManager.fetchWeatherForCoordinates(latitude: latitude, longitude: longitude) { weather in
+        fetchManager?.fetchWeatherForCoordinates(latitude: latitude, longitude: longitude) { weather in
             DispatchQueue.main.async {
                 self.updateView(weather: weather)
                 self.isActivityAnimatingStart(false)
